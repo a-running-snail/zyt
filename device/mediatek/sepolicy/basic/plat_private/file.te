@@ -1,0 +1,34 @@
+# ==============================================
+# MTK Policy Rule
+# ==============================================
+
+# For drmserver
+# Date: WK1812
+# Operation : Migration
+# Purpose : For drmserver
+type access_sys_file, fs_type, sysfs_type;
+
+# begin, prize-lifenfen-20181113, add for hareware info
+type sysfs_hwinfo, fs_type, sysfs_type;
+# end
+#prize  add  for motor calibration flag by zhuzhengjiang 20190416-begin
+type proc_hall1_m1120_califlag, fs_type, proc_type;
+#prize  add  for motor calibration flag by zhuzhengjiang 20190416-end
+# begin, prize-lifenfen-20190107, add for factorytest hall read permission
+type sysfs_hall, fs_type, sysfs_type;
+type proc_hall2_m1120_down, fs_type, proc_type;
+type proc_hall1_m1120_up, fs_type, proc_type;
+# end, prize-lifenfen-20190107, add for factorytest hall read permission
+
+# begin, prize-zhuzhengjiang-20190314, add for flash_torch write read permission
+type sysfs_flashlight_torch, fs_type, sysfs_type;
+# end, prize-lifenfen-20190107, add for flash_torch write read permission
+# begin, prize-wyq-20190114, add for goodix fp bl hbm control permission
+# type sysfs_lcd-backlight_brightness, fs_type, sysfs_type;
+# type sysfs_lcd-backlight_hbm_mode, fs_type, sysfs_type;
+type proc_leds_brightness, fs_type, proc_type;
+type proc_leds_hbm_mode, fs_type, proc_type;
+# end, prize-wyq-20190114, add for goodix fp bl hbm control permission
+
+# prize added by lifenfen, for PrizeFactoryTest CameraHall rw permission, 20190110 begin
+type sysfs_camera_hall, fs_type, sysfs_type;

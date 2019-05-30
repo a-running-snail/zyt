@@ -1,0 +1,7 @@
+# type hal_ifaa, domain;
+hal_server_domain(hal_ifaa, mtk_hal_ifaa);
+
+type hal_ifaa_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(hal_ifaa);
+
+hwbinder_use(hal_ifaa);

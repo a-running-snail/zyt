@@ -1,0 +1,8 @@
+# Date: W18.32
+# Operation : dontaudit writing to timerslack_ns
+dontaudit system_server appdomain:file w_file_perms;
+allow system_server ota_package_file:dir getattr;
+allow uncrypt uncrypt:capability fowner;
+
+# prize-wyq 20190408, addf for system_server
+allow system_server proc_leds_hbm_mode:file {rw_file_perms};

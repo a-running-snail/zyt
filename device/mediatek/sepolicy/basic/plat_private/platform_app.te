@@ -1,0 +1,25 @@
+# ==============================================
+# MTK Policy Rule 
+# ==============================================
+
+# SEPolicy Split
+
+allow platform_app system_app_service:service_manager find;
+allow platform_app init:unix_stream_socket connectto;
+# begin, prize-zhuzhengjiang-20190107, add for flash_torch write read permission
+allow platform_app sysfs_flashlight_torch:file {rw_file_perms};
+# end, prize-zhuzhengjiang-20190107, add for flash_torch write read permission
+
+# Date : WK17.29
+# Stage: O Migration, SQC
+# Purpose: Allow to use selinux for hal_power
+hal_client_domain(platform_app, hal_power)
+
+# begin, prize-lifenfen-120181113, add for hareware info
+r_dir_file(platform_app, sysfs_hwinfo)
+# end
+
+# prize added by xiaoping, for PrizeCamera rw permission, 20190305 begin
+allow platform_app proc_hall2_m1120_down:file {rw_file_perms};
+allow platform_app proc_hall1_m1120_up:file {rw_file_perms};
+# prize added by xiaoping, for PrizeCamera rw permission, 20190305 end

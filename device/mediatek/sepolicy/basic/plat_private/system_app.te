@@ -1,0 +1,46 @@
+# ==============================================
+# MTK Policy Rule 
+# ==============================================
+
+
+# Date : 2016/07/12
+# Purpose : Issue submitter need creat folder on SD card
+allow system_app vfat:dir create;
+
+# Date: 2017/07/01
+# Change to simple policy
+allow system_app media_rw_data_file:dir {r_dir_perms w_dir_perms};
+allow system_app media_rw_data_file:file {r_file_perms w_file_perms};
+
+#Dat: 2017/07/13
+#Purpose: allow system app to read/open system data file
+allow system_app system_data_file:dir { read open };
+#prize add for PrizeAutoTest/PrizeFactoryTest zengke 20180827 begin
+allow system_app system_data_file:dir { read add_name };
+allow system_app system_data_file:file { read };
+#prize add for PrizeAutoTest/PrizeFactoryTest zengke 20180827 end
+
+# begin, prize-lifenfen-120181113, add for 8804 battery test
+r_dir_file(system_app, sysfs_batteryinfo)
+r_dir_file(system_app, sysfs_hwinfo)
+# end
+
+#prize  add  for motor calibration flag by zhuzhengjiang 20190416-begin
+allow system_app proc_hall1_m1120_califlag:file {rw_file_perms};
+#prize  add  for motor calibration flag by zhuzhengjiang 20190416-end
+
+# begin, prize-lifenfen-20190107, add for factorytest hall read permission
+r_dir_file(system_app, sysfs_hall)
+# end, prize-lifenfen-20190107, add for factorytest hall read permission
+
+# prize added by lifenfen, for PrizeFactoryTest CameraHall rw permission, 20190110 begin
+allow system_app sysfs_camera_hall:file {rw_file_perms};
+allow system_app proc_hall2_m1120_down:file {rw_file_perms};
+allow system_app proc_hall1_m1120_up:file {rw_file_perms};
+# prize added by lifenfen, for PrizeFactoryTest CameraHall rw permission, 20190110 end
+
+# begin, prize-wyq-20190114, add for goodix fp bl hbm control permission
+# allow system_app sysfs_lcd-backlight_brightness:file {rw_file_perms};
+# allow system_app sysfs_lcd-backlight_hbm_mode:file {rw_file_perms};
+allow system_app proc_leds_brightness:file {rw_file_perms};
+allow system_app proc_leds_hbm_mode:file {rw_file_perms};

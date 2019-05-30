@@ -1,0 +1,26 @@
+
+# insmod LKM under /odm or /vendor
+allow init self:capability sys_module;
+allow init system_file:system module_load;
+
+# boot process denial clean up
+allow init debugfs_tracing:dir write;
+allow init debugfs_tracing:file write;
+allow init sysfs_devices_system_cpu:file relabelfrom;
+
+#prize  add  for motor calibration flag by zhuzhengjiang 20190416-begin
+allow init proc_hall1_m1120_califlag:file setattr;
+#prize  add  for motor calibration flag by zhuzhengjiang 20190416-end
+
+# prize added by lifenfen, for PrizeFactoryTest CameraHall rw permission, 20190110 begin
+# Purpose : for L : add for partition (chown/chmod)
+allow init sysfs_camera_hall:file setattr;
+allow init proc_hall2_m1120_down:file setattr;
+allow init proc_hall1_m1120_up:file setattr;
+# prize added by lifenfen, for PrizeFactoryTest CameraHall rw permission, 20190110 end
+
+# begin, prize-wyq-20190114, add for goodix fp bl hbm control permission
+# allow init sysfs_lcd-backlight_brightness:file setattr;
+# allow init sysfs_lcd-backlight_hbm_mode:file setattr;
+allow init proc_leds_brightness:file setattr;
+allow init proc_leds_hbm_mode:file setattr;

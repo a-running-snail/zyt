@@ -1,0 +1,19 @@
+# HwBinder IPC from client to server
+binder_call(mtk_hal_ifaa_client, mtk_hal_ifaa_server);
+
+add_hwservice(mtk_hal_ifaa_server, mtk_hal_ifaa_hwservice)
+allow mtk_hal_ifaa_client mtk_hal_ifaa_hwservice:hwservice_manager find;
+
+allow system_app mtk_hal_ifaa_hwservice:hwservice_manager find;
+allow system_app hal_ifaa:binder call;
+
+allow platform_app mtk_hal_ifaa_hwservice:hwservice_manager find;
+allow platform_app hal_ifaa:binder call;
+
+allow hal_ifaa teei_client_device:chr_file { read write open ioctl };
+allow hal_ifaa hal_capi_hwservice:hwservice_manager find;
+
+allow hal_ifaa hal_capi_default:binder call;
+allow hal_ifaa hidl_allocator_hwservice:hwservice_manager { find };
+allow hal_ifaa hidl_memory_hwservice:hwservice_manager { find };
+allow hal_ifaa hal_capi_default:fd { use };

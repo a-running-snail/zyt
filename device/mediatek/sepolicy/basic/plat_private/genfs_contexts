@@ -1,0 +1,31 @@
+# begin, prize-lifenfen-20181113, add for hareware info
+genfscon sysfs /devices/virtual/hw_info/hw_info_data u:object_r:sysfs_hwinfo:s0
+genfscon sysfs /class/hw_info/hw_info_data u:object_r:sysfs_hwinfo:s0
+# end
+
+# begin, prize-lifenfen-20190107, add for factorytest hall read permission
+genfscon sysfs /hall_state/hall_status u:object_r:sysfs_hall:s0
+# end, prize-lifenfen-20190107, add for factorytest hall read permission
+
+# begin, prize-zhuzhengjiang-20190314, add for flash_torch write read permission
+genfscon sysfs /class/flashlight_core/flashlight/flashlight_torch u:object_r:sysfs_flashlight_torch:s0
+genfscon sysfs /devices/virtual/flashlight_core/flashlight/flashlight_torch  u:object_r:sysfs_flashlight_torch:s0
+# end, prize-zhuzhengjiang-20190314, add for flash_torch write read permission
+#prize  add  for motor calibration flag by zhuzhengjiang 20190416-begin
+genfscon proc /hall1/m1120_calibrate_flag u:object_r:proc_hall1_m1120_califlag:s0
+#prize  add  for motor calibration flag by zhuzhengjiang 20190416-end
+
+# prize added by lifenfen, for PrizeFactoryTest CameraHall rw permission, 20190110 begin
+genfscon sysfs /devices/virtual/input/input3/rawdata u:object_r:sysfs_camera_hall:s0
+genfscon sysfs /devices/virtual/input/input3/enable_up u:object_r:sysfs_camera_hall:s0
+genfscon sysfs /devices/virtual/input/input4/rawdata u:object_r:sysfs_camera_hall:s0
+genfscon sysfs /devices/virtual/input/input4/enable_down u:object_r:sysfs_camera_hall:s0
+genfscon proc /hall2/m1120_down u:object_r:proc_hall2_m1120_down:s0
+genfscon proc /hall1/m1120_up u:object_r:proc_hall1_m1120_up:s0
+# prize added by lifenfen, for PrizeFactoryTest CameraHall rw permission, 20190110 end
+
+# begin, prize-wyq-20190114, add for goodix fp bl hbm control permission
+# genfscon sysfs /class/leds/lcd-backlight/brightness u:object_r:sysfs_lcd-backlight_brightness:s0
+# genfscon sysfs /class/leds/lcd-backlight/hbm_mode u:object_r:sysfs_lcd-backlight_hbm_mode:s0
+genfscon proc /leds/brightness u:object_r:proc_leds_brightness:s0
+genfscon proc /leds/hbm_mode u:object_r:proc_leds_hbm_mode:s0

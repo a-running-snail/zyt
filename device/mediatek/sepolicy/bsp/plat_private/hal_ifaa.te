@@ -1,0 +1,2 @@
+allow hal_ifaa hal_allocator_default:binder call;
+allow hal_ifaa hal_allocator_default:fd use;
