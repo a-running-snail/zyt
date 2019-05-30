@@ -1,0 +1,5 @@
+# Date : 2019/03/21
+# Auther : PeiLong
+# Purpose : Add for zyt securechip
+type securechip_device, dev_type;
+

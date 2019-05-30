@@ -1,0 +1,21 @@
+# Add for zyt securechip access by PeiLong 20190320
+
+# ==============================================================================
+# Type Declaration
+# ==============================================================================
+type hal_zyitong_mtk, domain;
+type hal_zyitong_mtk_exec, exec_type, file_type, vendor_file_type;
+type cos_file, file_type, vendor_file_type;
+
+# hwbinder access
+init_daemon_domain(hal_zyitong_mtk)
+hwbinder_use(hal_zyitong_mtk)
+hal_server_domain(hal_zyitong_mtk, hal_zyitong)
+add_hwservice(hal_zyitong_mtk, hal_zyitong_hwservice)
+
+# device access
+allow hal_zyitong_mtk securechip_device:chr_file { ioctl read write getattr lock append map open };
+allow hal_zyitong_mtk mmcblk1_block_device:chr_file { ioctl read write getattr lock append map open };
+allow hal_zyitong_mtk cos_file:file { read };
+
+hal_client_domain(platform_app, hal_zyitong)

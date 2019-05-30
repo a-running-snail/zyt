@@ -1,0 +1,8 @@
+# Add for zyt securechip access by PeiLong 20190320
+
+# HwBinder IPC from clients into server, and callbacks
+binder_call(hal_zyitong_client, hal_zyitong_server)
+binder_call(hal_zyitong_server, hal_zyitong_client)
+
+# give permission for hal client
+allow hal_zyitong_client hal_zyitong_hwservice:hwservice_manager find;

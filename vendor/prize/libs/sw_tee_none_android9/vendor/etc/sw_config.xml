@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?><sunwave:Config xmlns:sunwave="http://www.sunwavecorp.com/some-location" Environment="TEE" platform="项目信息: 请填写项目信息">
+  <feature>
+    <key_emulation_mode cname="按键功能模式选择" default="0" desc="按键功能模式选择。默认：禁用按键功能(0)" format="array" options="禁用按键功能(0)|仅传统单击(1)|手指按下报单击(2)|手指抬起报单击或长按(3)|仅长按(4)" useable="true" values="0|1|2|3|4">3</key_emulation_mode>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </feature>
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</sunwave:Config>

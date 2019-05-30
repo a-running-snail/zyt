@@ -1,0 +1,5 @@
+#############################
+# Add for zyt securechip access by PeiLong 20190320
+attribute hal_zyitong;
+attribute hal_zyitong_client;
+attribute hal_zyitong_server;

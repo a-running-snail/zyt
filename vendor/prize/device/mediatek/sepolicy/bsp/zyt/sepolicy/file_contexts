@@ -1,0 +1,6 @@
+#############################
+# Add for zyt securechip access by PeiLong 20190320
+/dev/a5SpiInHal                      u:object_r:securechip_device:s0
+/vendor/etc/firmware/cos_code.hex    u:object_r:cos_file:s0
+/(vendor|system/vendor)/bin/hw/vendor\.qti\.zyitong\.device@1\.0-service   u:object_r:hal_zyitong_mtk_exec:s0
+#/vendor/etc/securechip_access.xml                                   u:object_r:securechip_file:s0

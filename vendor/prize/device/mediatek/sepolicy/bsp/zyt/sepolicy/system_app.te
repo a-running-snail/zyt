@@ -1,0 +1,3 @@
+allow system_app hal_zyitong_hwservice:hwservice_manager { find };
+allow system_app hal_zyitong_mtk:binder { call };
+

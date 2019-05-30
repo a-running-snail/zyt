@@ -1,0 +1,2 @@
+#Add for securechip by PeiLong 20190321
+type hal_zyitong_hwservice, hwservice_manager_type;

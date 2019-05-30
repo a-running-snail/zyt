@@ -1,0 +1,4 @@
+service zyitong_device_hal_service /vendor/bin/hw/vendor.qti.zyitong.device@1.0-service
+    class hal
+    user system
+    group system
