@@ -1,0 +1,17 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.tencent.soter.soterserver"
+          coreApp="true"
+          android:protectionLevel="signature" >
+
+    <application android:label="SoterServiceApp" >
+
+        <service
+            android:name="com.tencent.soter.soterserver.SoterService"
+            android:process=":remote"
+            android:exported="true">
+            <intent-filter >
+                <action android:name="com.tencent.soter.soterserver.ISoterService" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

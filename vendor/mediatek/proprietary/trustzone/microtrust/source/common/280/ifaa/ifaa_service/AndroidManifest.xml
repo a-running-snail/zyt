@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
+        package="org.ifaa.android.service"
+        coreApp="true"
+        android:protectionLevel="signature"
+        android:sharedUserId="android.uid.system">
+
+    <uses-permission android:name="android.Manifest.permission.INTERACT_ACROSS_USERS_FULL"/>
+    <uses-permission android:name="android.Manifest.permission.REAL_GET_TASKS"/>
+    <uses-permission android:name="android.Manifest.permission.KILL_BACKGROUND_PROCESSES"/>
+    <uses-permission android:name="android.Manifest.permission.KILL_UID"/>
+    <uses-permission android:name="android.Manifest.permission.FORCE_STOP_PACKAGES"/>
+
+    <application android:name="IFAAManagerApp"
+                 android:persistent="true"
+                 android:directBootAware="true">
+    </application>
+</manifest>
