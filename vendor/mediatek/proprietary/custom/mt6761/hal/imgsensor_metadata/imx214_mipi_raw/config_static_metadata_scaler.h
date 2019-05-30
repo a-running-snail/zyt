@@ -1,0 +1,1009 @@
+/* Copyright Statement:
+ *
+ * This software/firmware and related documentation ("MediaTek Software") are
+ * protected under relevant copyright laws. The information contained herein is
+ * confidential and proprietary to MediaTek Inc. and/or its licensors. Without
+ * the prior written permission of MediaTek inc. and/or its licensors, any
+ * reproduction, modification, use or disclosure of MediaTek Software, and
+ * information contained herein, in whole or in part, shall be strictly
+ * prohibited.
+ *
+ * MediaTek Inc. (C) 2010. All rights reserved.
+ *
+ * BY OPENING THIS FILE, RECEIVER HEREBY UNEQUIVOCALLY ACKNOWLEDGES AND AGREES
+ * THAT THE SOFTWARE/FIRMWARE AND ITS DOCUMENTATIONS ("MEDIATEK SOFTWARE")
+ * RECEIVED FROM MEDIATEK AND/OR ITS REPRESENTATIVES ARE PROVIDED TO RECEIVER
+ * ON AN "AS-IS" BASIS ONLY. MEDIATEK EXPRESSLY DISCLAIMS ANY AND ALL
+ * WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR
+ * NONINFRINGEMENT. NEITHER DOES MEDIATEK PROVIDE ANY WARRANTY WHATSOEVER WITH
+ * RESPECT TO THE SOFTWARE OF ANY THIRD PARTY WHICH MAY BE USED BY,
+ * INCORPORATED IN, OR SUPPLIED WITH THE MEDIATEK SOFTWARE, AND RECEIVER AGREES
+ * TO LOOK ONLY TO SUCH THIRD PARTY FOR ANY WARRANTY CLAIM RELATING THERETO.
+ * RECEIVER EXPRESSLY ACKNOWLEDGES THAT IT IS RECEIVER'S SOLE RESPONSIBILITY TO
+ * OBTAIN FROM ANY THIRD PARTY ALL PROPER LICENSES CONTAINED IN MEDIATEK
+ * SOFTWARE. MEDIATEK SHALL ALSO NOT BE RESPONSIBLE FOR ANY MEDIATEK SOFTWARE
+ * RELEASES MADE TO RECEIVER'S SPECIFICATION OR TO CONFORM TO A PARTICULAR
+ * STANDARD OR OPEN FORUM. RECEIVER'S SOLE AND EXCLUSIVE REMEDY AND MEDIATEK'S
+ * ENTIRE AND CUMULATIVE LIABILITY WITH RESPECT TO THE MEDIATEK SOFTWARE
+ * RELEASED HEREUNDER WILL BE, AT MEDIATEK'S OPTION, TO REVISE OR REPLACE THE
+ * MEDIATEK SOFTWARE AT ISSUE, OR REFUND ANY SOFTWARE LICENSE FEES OR SERVICE
+ * CHARGE PAID BY RECEIVER TO MEDIATEK FOR SUCH MEDIATEK SOFTWARE AT ISSUE.
+ *
+ * The following software/firmware and/or related documentation ("MediaTek
+ * Software") have been modified by MediaTek Inc. All revisions are subject to
+ * any receiver's applicable license agreements with MediaTek Inc.
+ */
+
+
+STATIC_METADATA2_BEGIN(DEVICE, SCALER, SENSOR_DRVNAME_IMX214_MIPI_RAW)
+//------------------------------------------------------------------------------
+//  android.scaler
+//------------------------------------------------------------------------------
+    //==========================================================================
+//    [ ANDROID_SCALER_CROP_REGION - ANDROID_SCALER_START ] =
+//    { "cropRegion",                    TYPE_INT32  },
+    //==========================================================================
+    /*CONFIG_METADATA_BEGIN(MTK_SCALER_AVAILABLE_FORMATS) //remove @ 3.2
+        CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YV12, MINT32)         // YV12
+        CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_Y8, MINT32)
+        CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+        CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCrCb_420_SP, MINT32) // NV21
+        CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_422_I, MINT32) // YUY2
+    CONFIG_METADATA_END()
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_SCALER_AVAILABLE_JPEG_MIN_DURATIONS)//remove @ 3.2
+        CONFIG_ENTRY_VALUE(33331760L, MINT64)
+    CONFIG_METADATA_END()*/
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_SCALER_AVAILABLE_JPEG_SIZES)//remove @ 3.2
+        CONFIG_ENTRY_VALUE(MSize(800,  600), MSize)
+        CONFIG_ENTRY_VALUE(MSize(1600,  1200), MSize)
+        CONFIG_ENTRY_VALUE(MSize(2560,  1920), MSize)
+    CONFIG_METADATA_END()
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_SCALER_AVAILABLE_MAX_DIGITAL_ZOOM)//
+        CONFIG_ENTRY_VALUE(4, MFLOAT)
+    CONFIG_METADATA_END()
+    //==========================================================================
+    /*CONFIG_METADATA_BEGIN(MTK_SCALER_AVAILABLE_PROCESSED_MIN_DURATIONS)//remove @ 3.2
+        CONFIG_ENTRY_VALUE(33331760L, MINT64)
+    CONFIG_METADATA_END()
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_SCALER_AVAILABLE_PROCESSED_SIZES)//remove @ 3.2
+         CONFIG_ENTRY_VALUE(MSize(320,  240), MSize)
+         CONFIG_ENTRY_VALUE(MSize(640,  480), MSize)
+         CONFIG_ENTRY_VALUE(MSize(1280, 720), MSize)
+         CONFIG_ENTRY_VALUE(MSize(1920, 1080), MSize)
+         CONFIG_ENTRY_VALUE(MSize(3200, 2400), MSize)
+    CONFIG_METADATA_END()
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_SCALER_AVAILABLE_RAW_MIN_DURATIONS) //remove @ 3.2
+        CONFIG_ENTRY_VALUE(33331760L, MINT64)
+    CONFIG_METADATA_END()
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_SCALER_AVAILABLE_RAW_SIZES)//remove @ 3.2
+        CONFIG_ENTRY_VALUE(MSize(3200,2400), MSize)
+    CONFIG_METADATA_END()*/
+    /*zhengjiang.zhu@prize.Camera.Driver  2018/12/18  add for cts testReprocessingCharacteristics*/
+    //Doesn't support reprocessing but report input format: [34, 35]
+    /*
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_SCALER_AVAILABLE_INPUT_OUTPUT_FORMATS_MAP)//new hidden
+        CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_IMPLEMENTATION_DEFINED, MINT32)
+        CONFIG_ENTRY_VALUE(2, MINT32)
+        CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+        CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+        CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+        CONFIG_ENTRY_VALUE(2, MINT32)
+        CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+        CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+    CONFIG_METADATA_END()
+    //==========================================================================
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_CONTROL_AVAILABLE_HIGH_SPEED_VIDEO_CONFIGURATIONS)//  new hidden
+        CONFIG_ENTRY_VALUE( 640, MINT32)    // width
+        CONFIG_ENTRY_VALUE( 480, MINT32)    // height
+        CONFIG_ENTRY_VALUE(  30, MINT32)    // fps_min
+        CONFIG_ENTRY_VALUE( 120, MINT32)    // fps_max
+        CONFIG_ENTRY_VALUE(   4, MINT32)    // batch_size_max
+        CONFIG_ENTRY_VALUE( 640, MINT32)    // width
+        CONFIG_ENTRY_VALUE( 480, MINT32)    // height
+        CONFIG_ENTRY_VALUE( 120, MINT32)    // fps_min
+        CONFIG_ENTRY_VALUE( 120, MINT32)    // fps_max
+        CONFIG_ENTRY_VALUE(   4, MINT32)    // batch_size_max
+    CONFIG_METADATA_END()
+    */
+    //prize-camera  add for Insertion resolution  by zhuzhengjiang 20190103-begin
+    /*if you want to insert a resolution bigger then sensor full  size ,please add in key MTK_SCALER_AVAILABLE_INSERT_STREAM_CONFIGURATIONS
+      for example superzoom 8320 x 6240 */
+#ifdef PRIZE_CAMERA_INSERT_SUPPORT
+    CONFIG_METADATA_BEGIN(MTK_SCALER_AVAILABLE_INSERT_STREAM_CONFIGURATIONS)//new hidden
+                //prize-huangzhanbin-20181208-add for superzoom prize camera-start
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+                CONFIG_ENTRY_VALUE(8320, MINT32)
+                CONFIG_ENTRY_VALUE(6240, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+                //prize-huangzhanbin-20181208-add for superzoom prize camera-end
+
+                //prize fengshangdong modify at 20181103
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32) //13mp 4:3
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(3120, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+                //prize end
+
+				/*prize-add for 18:9-huangpengfei-2019-01-18-start*/
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32) //13mp 18:9
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(2080, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+				/*prize-add for 18:9-huangpengfei-2019-01-18-end*/
+
+                //prize xiaoping modify at 20190105-start
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32) //13mp 19:9
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(1968, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+                //prize xiaoping modify at 20190105-end
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32) //13mp 16:9
+                CONFIG_ENTRY_VALUE(4096, MINT32)
+                CONFIG_ENTRY_VALUE(2304, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32) //8mp 4:3
+                CONFIG_ENTRY_VALUE(3264, MINT32)
+                CONFIG_ENTRY_VALUE(2448, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32) //8mp 16:9
+                CONFIG_ENTRY_VALUE(3840, MINT32)
+                CONFIG_ENTRY_VALUE(2160, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+                CONFIG_ENTRY_VALUE(2560, MINT32)
+                CONFIG_ENTRY_VALUE(1920, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+                CONFIG_ENTRY_VALUE(1920, MINT32)
+                CONFIG_ENTRY_VALUE(1088, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+                CONFIG_ENTRY_VALUE(1280, MINT32)
+                CONFIG_ENTRY_VALUE( 720, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+                CONFIG_ENTRY_VALUE( 640, MINT32)
+                CONFIG_ENTRY_VALUE( 480, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+                CONFIG_ENTRY_VALUE( 320, MINT32)
+                CONFIG_ENTRY_VALUE( 240, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                /*zhengjiang.zhu@prize.Camera.Driver  2018/12/17  add for cts testRaw16JpegConsistency*/
+                //junit.framework.AssertionFailedError: No capture sizes available for RAW format!
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_RAW16, MINT32)
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(3120, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+                /*zhengjiang.zhu@prize.Camera.Driver  2018/12/17  end for cts testRaw16JpegConsistency*/
+
+                //prize-camera  add for cts:testAvailableStreamConfigs   by zhuzhengjiang 20190109-begin
+                //Size 4096x2304 not found in YUV format
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 4:3
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(3120, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+				/*prize-add for 18:9-huangpengfei-2019-01-18-start*/
+				CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 18:9
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(2080, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+				/*prize-add for 18:9-huangpengfei-2019-01-18-end*/
+				
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 19:9
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(1968, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 16:9
+                CONFIG_ENTRY_VALUE(4096, MINT32)
+                CONFIG_ENTRY_VALUE(2304, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //8mp 4:3
+                CONFIG_ENTRY_VALUE(3264, MINT32)
+                CONFIG_ENTRY_VALUE(2448, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //8mp 16:9
+                CONFIG_ENTRY_VALUE(3840, MINT32)
+                CONFIG_ENTRY_VALUE(2160, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(2560, MINT32)
+                CONFIG_ENTRY_VALUE(1920, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+                //prize-camera  add for cts:testAvailableStreamConfigs   by zhuzhengjiang 20190109-end
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(1920, MINT32)
+                CONFIG_ENTRY_VALUE(1088, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(1920, MINT32)
+                CONFIG_ENTRY_VALUE(1080, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                //prize-xiaoping-20190105-add
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(1520, MINT32)
+                CONFIG_ENTRY_VALUE( 720, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+				CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+				CONFIG_ENTRY_VALUE(2304, MINT32)
+				CONFIG_ENTRY_VALUE(1088, MINT32)
+				CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                //prize-xiaoping-20190105-end
+
+                //prize fengshangdong 
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(1440, MINT32)
+                CONFIG_ENTRY_VALUE(1080, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+                //priz end
+
+				/*prize-add for 18:9-huangpengfei-2019-01-18-start*/
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 18:9
+                CONFIG_ENTRY_VALUE(1440, MINT32)
+                CONFIG_ENTRY_VALUE(720, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+				/*prize-add for 18:9-huangpengfei-2019-01-18-end*/
+
+                //prize-huangzhanbin-20181208-add
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(1280, MINT32)
+                CONFIG_ENTRY_VALUE( 960, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+                //prize-huangzhanbin-20181208-end
+				
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(1280, MINT32)
+                CONFIG_ENTRY_VALUE( 720, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 960, MINT32)
+                CONFIG_ENTRY_VALUE( 720, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 720, MINT32)
+                CONFIG_ENTRY_VALUE( 480, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 640, MINT32)
+                CONFIG_ENTRY_VALUE( 480, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 352, MINT32)
+                CONFIG_ENTRY_VALUE( 288, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 320, MINT32)
+                CONFIG_ENTRY_VALUE( 240, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+				
+				/*prize-modify-add ThumbnailSize-xiaoping-20190117-start*/
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 304, MINT32)
+                CONFIG_ENTRY_VALUE( 144, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+				
+				CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 288, MINT32)
+                CONFIG_ENTRY_VALUE( 144, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 256, MINT32)
+                CONFIG_ENTRY_VALUE( 144, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+				/*prize-modify-add ThumbnailSize-xiaoping-20190117-end*/	
+				
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 176, MINT32)
+                CONFIG_ENTRY_VALUE( 144, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+    CONFIG_METADATA_END()
+#endif
+    //prize-camera  add for Insertion resolution  by zhuzhengjiang 20190103-end
+    //==========================================================================
+    /*zhengjiang.zhu@prize.Camera.Driver  2018/12/18  add for cts testReprocessingCharacteristics*/
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS)//new hidden
+
+                //prize fengshangdong modify at 20181103
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32) //13mp 4:3
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(3120, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+                //prize end
+
+				/*prize-add for 18:9-huangpengfei-2019-01-18-start*/
+				CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32) //13mp 18:9
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(2080, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+				/*prize-add for 18:9-huangpengfei-2019-01-18-end*/
+				
+                //prize xiaoping modify at 20190105-start
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32) //13mp 19:9
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(1968, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+                //prize xiaoping modify at 20190105-end
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32) //13mp 16:9
+                CONFIG_ENTRY_VALUE(4096, MINT32)
+                CONFIG_ENTRY_VALUE(2304, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32) //8mp 4:3
+                CONFIG_ENTRY_VALUE(3264, MINT32)
+                CONFIG_ENTRY_VALUE(2448, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32) //8mp 16:9
+                CONFIG_ENTRY_VALUE(3840, MINT32)
+                CONFIG_ENTRY_VALUE(2160, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+                CONFIG_ENTRY_VALUE(2560, MINT32)
+                CONFIG_ENTRY_VALUE(1920, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+                CONFIG_ENTRY_VALUE(1920, MINT32)
+                CONFIG_ENTRY_VALUE(1088, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+                CONFIG_ENTRY_VALUE(1280, MINT32)
+                CONFIG_ENTRY_VALUE( 720, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+                CONFIG_ENTRY_VALUE( 640, MINT32)
+                CONFIG_ENTRY_VALUE( 480, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT32)
+                CONFIG_ENTRY_VALUE( 320, MINT32)
+                CONFIG_ENTRY_VALUE( 240, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                /*zhengjiang.zhu@prize.Camera.Driver  2018/12/17  add for cts testRaw16JpegConsistency*/
+                //junit.framework.AssertionFailedError: No capture sizes available for RAW format!
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_RAW16, MINT32)
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(3120, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+                /*zhengjiang.zhu@prize.Camera.Driver  2018/12/17  end for cts testRaw16JpegConsistency*/
+
+                //prize-camera  add for cts by zhuzhengjiang 20190103-begin
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(3120, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+                //prize-camera  add for cts by zhuzhengjiang 20190103-end
+				
+				/*prize-add for 18:9-huangpengfei-2019-01-18-start*/
+				CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 18:9
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(2080, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+				/*prize-add for 18:9-huangpengfei-2019-01-18-end*/
+
+                //prize-camera  add for cts:testAvailableStreamConfigs   by zhuzhengjiang 20190109-begin
+                //Size 4096x2304 not found in YUV format
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 19:9
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(1968, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 16:9
+                CONFIG_ENTRY_VALUE(4096, MINT32)
+                CONFIG_ENTRY_VALUE(2304, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //8mp 4:3
+                CONFIG_ENTRY_VALUE(3264, MINT32)
+                CONFIG_ENTRY_VALUE(2448, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //8mp 16:9
+                CONFIG_ENTRY_VALUE(3840, MINT32)
+                CONFIG_ENTRY_VALUE(2160, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(2560, MINT32)
+                CONFIG_ENTRY_VALUE(1920, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                //prize-camera  add for cts:testAvailableStreamConfigs   by zhuzhengjiang 20190109-end
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(1920, MINT32)
+                CONFIG_ENTRY_VALUE(1088, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(1920, MINT32)
+                CONFIG_ENTRY_VALUE(1080, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                //prize-xiaoping-20190105-add
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(1520, MINT32)
+                CONFIG_ENTRY_VALUE(720, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(2304, MINT32)
+                CONFIG_ENTRY_VALUE(1088, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+
+                //prize-xiaoping-20190105-add
+
+                //prize fengshangdong 
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(1440, MINT32)
+                CONFIG_ENTRY_VALUE(1080, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+                //priz end
+				
+				/*prize-add for 18:9-huangpengfei-2019-01-18-start*/
+				CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 18:9
+                CONFIG_ENTRY_VALUE(1440, MINT32)
+                CONFIG_ENTRY_VALUE(720, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+				/*prize-add for 18:9-huangpengfei-2019-01-18-end*/
+				
+                //prize-huangzhanbin-20181208-add
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(1280, MINT32)
+                CONFIG_ENTRY_VALUE( 960, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+                //prize-huangzhanbin-20181208-end
+				
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(1280, MINT32)
+                CONFIG_ENTRY_VALUE( 720, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 960, MINT32)
+                CONFIG_ENTRY_VALUE( 720, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 720, MINT32)
+                CONFIG_ENTRY_VALUE( 480, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 640, MINT32)
+                CONFIG_ENTRY_VALUE( 480, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 352, MINT32)
+                CONFIG_ENTRY_VALUE( 288, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 320, MINT32)
+                CONFIG_ENTRY_VALUE( 240, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+				
+				/*prize-modify-add ThumbnailSize-xiaoping-20190117-start*/
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 304, MINT32)
+                CONFIG_ENTRY_VALUE( 144, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)				
+	
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 288, MINT32)
+                CONFIG_ENTRY_VALUE( 144, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+	
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 256, MINT32)
+                CONFIG_ENTRY_VALUE( 144, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+				/*prize-modify-add ThumbnailSize-xiaoping-20190117-end*/	
+	
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE( 176, MINT32)
+                CONFIG_ENTRY_VALUE( 144, MINT32)
+                CONFIG_ENTRY_VALUE(MTK_SCALER_AVAILABLE_STREAM_CONFIGURATIONS_OUTPUT, MINT32)
+    CONFIG_METADATA_END()
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_SCALER_AVAILABLE_MIN_FRAME_DURATIONS)//new hidden
+                //prize fengshangdong modify at 20181103
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64) //13mp 4:3
+                CONFIG_ENTRY_VALUE(4160, MINT64)
+                CONFIG_ENTRY_VALUE(3120, MINT64)
+                CONFIG_ENTRY_VALUE(66666666, MINT64)  //CONFIG_ENTRY_VALUE(66666666, MINT64)  /*prize-camera  add for cts:testYuvBurst   by zhuzhengjiang 20190105*/
+                //prize end
+				
+				/*prize-add for 18:9-huangpengfei-2019-01-18-start*/
+				CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64) //13mp 18:9
+                CONFIG_ENTRY_VALUE(4160, MINT64)
+                CONFIG_ENTRY_VALUE(2080, MINT64)
+                CONFIG_ENTRY_VALUE(50000000, MINT64)
+				/*prize-add for 18:9-huangpengfei-2019-01-18-end*/
+
+                //prize xiaoping modify at 20190105 start
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64) //13mp 19:9
+                CONFIG_ENTRY_VALUE(4160, MINT64)
+                CONFIG_ENTRY_VALUE(1968, MINT64)
+                CONFIG_ENTRY_VALUE(50000000, MINT64)  //CONFIG_ENTRY_VALUE(66666666, MINT64)  /*prize-camera  add for cts:testYuvBurst   by zhuzhengjiang 20190105*/
+                //prize xiaoping modify at 20190105 end
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64) //13mp 16:9
+                CONFIG_ENTRY_VALUE(4096, MINT64)
+                CONFIG_ENTRY_VALUE(2304, MINT64)
+                CONFIG_ENTRY_VALUE(50000000, MINT64) //CONFIG_ENTRY_VALUE(66666666, MINT64) /*prize-camera  add for cts:testYuvBurst   by zhuzhengjiang 20190105*/
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64) //8mp 4:3
+                CONFIG_ENTRY_VALUE(3264, MINT64)
+                CONFIG_ENTRY_VALUE(2448, MINT64)
+                CONFIG_ENTRY_VALUE(50000000, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64) //8mp 16:9
+                CONFIG_ENTRY_VALUE(3840, MINT64)
+                CONFIG_ENTRY_VALUE(2160, MINT64)
+                CONFIG_ENTRY_VALUE(50000000, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64)
+                CONFIG_ENTRY_VALUE(2560, MINT64)
+                CONFIG_ENTRY_VALUE(1920, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64)
+                CONFIG_ENTRY_VALUE(1920, MINT64)
+                CONFIG_ENTRY_VALUE(1088, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64)
+                CONFIG_ENTRY_VALUE(1280, MINT64)
+                CONFIG_ENTRY_VALUE( 720, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64)
+                CONFIG_ENTRY_VALUE( 640, MINT64)
+                CONFIG_ENTRY_VALUE( 480, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64)
+                CONFIG_ENTRY_VALUE( 320, MINT64)
+                CONFIG_ENTRY_VALUE( 240, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                /*zhengjiang.zhu@prize.Camera.Driver  2018/12/17  add for cts testRaw16JpegConsistency*/
+                //junit.framework.AssertionFailedError: No capture sizes available for RAW format!
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_RAW16, MINT32)
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(3120, MINT32)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+                /*zhengjiang.zhu@prize.Camera.Driver  2018/12/17  end for cts testRaw16JpegConsistency*/
+
+                //prize-camera  add for cts:testYuvBurst   by zhuzhengjiang 20190105-begin
+                //Cam 0: Target FPS range of (2147483647, 2147483647) must be supported
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(4160, MINT64)
+                CONFIG_ENTRY_VALUE(3120, MINT64)
+                CONFIG_ENTRY_VALUE(66666666, MINT64)
+                //prize-camera  add for cts:testYuvBurst   by zhuzhengjiang 20190105-end
+
+				/*prize-add for 18:9-huangpengfei-2019-01-18-start*/
+				CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 18:9
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(2080, MINT32)
+                CONFIG_ENTRY_VALUE(50000000, MINT32)
+				/*prize-add for 18:9-huangpengfei-2019-01-18-end*/
+				
+                //prize-camera  add for cts:testAvailableStreamConfigs   by zhuzhengjiang 20190109-begin
+                //Size 4096x2304 not found in YUV format
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 19:9
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(1968, MINT32)
+                CONFIG_ENTRY_VALUE(50000000, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 16:9
+                CONFIG_ENTRY_VALUE(4096, MINT32)
+                CONFIG_ENTRY_VALUE(2304, MINT32)
+                CONFIG_ENTRY_VALUE(50000000, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //8mp 4:3
+                CONFIG_ENTRY_VALUE(3264, MINT32)
+                CONFIG_ENTRY_VALUE(2448, MINT32)
+                CONFIG_ENTRY_VALUE(50000000, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //8mp 16:9
+                CONFIG_ENTRY_VALUE(3840, MINT32)
+                CONFIG_ENTRY_VALUE(2160, MINT32)
+                CONFIG_ENTRY_VALUE(50000000, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(2560, MINT32)
+                CONFIG_ENTRY_VALUE(1920, MINT32)
+                CONFIG_ENTRY_VALUE(33333333, MINT32)
+                //prize-camera  add for cts:testAvailableStreamConfigs   by zhuzhengjiang 20190109-end
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(1920, MINT64)
+                CONFIG_ENTRY_VALUE(1088, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(1920, MINT64)
+                CONFIG_ENTRY_VALUE(1080, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                //prize-add xiaoping-20190105-start 
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(1520, MINT64)
+                CONFIG_ENTRY_VALUE(720, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+			    CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+				CONFIG_ENTRY_VALUE(2304, MINT64)
+				CONFIG_ENTRY_VALUE(1088, MINT64)
+				CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                //prize-add xiaoping-20190105-end 
+
+                //prize fengshangdong 
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(1440, MINT64)
+                CONFIG_ENTRY_VALUE(1080, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+                //prize end
+				
+				/*prize-add for 18:9-huangpengfei-2019-01-18-start*/
+				CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64) //18:9
+                CONFIG_ENTRY_VALUE(1440, MINT64)
+                CONFIG_ENTRY_VALUE(720, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+				/*prize-add for 18:9-huangpengfei-2019-01-18-end*/
+
+                //prize-huangzhanbin-20181208-add
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(1280, MINT64)
+                CONFIG_ENTRY_VALUE( 960, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+                //prize-huangzhanbin-20181208-end
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(1280, MINT64)
+                CONFIG_ENTRY_VALUE( 720, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 960, MINT64)
+                CONFIG_ENTRY_VALUE( 720, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 720, MINT64)
+                CONFIG_ENTRY_VALUE( 480, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 640, MINT64)
+                CONFIG_ENTRY_VALUE( 480, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 352, MINT64)
+                CONFIG_ENTRY_VALUE( 288, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 320, MINT64)
+                CONFIG_ENTRY_VALUE( 240, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+				/*prize-modify-add ThumbnailSize-xiaoping-20190117-start*/
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 304, MINT64)
+                CONFIG_ENTRY_VALUE( 144, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 288, MINT64)
+                CONFIG_ENTRY_VALUE( 144, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)	
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 256, MINT64)
+                CONFIG_ENTRY_VALUE( 144, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)				
+				/*prize-modify-add ThumbnailSize-xiaoping-20190117-end*/
+				
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 176, MINT64)
+                CONFIG_ENTRY_VALUE( 144, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+    CONFIG_METADATA_END()
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_SCALER_AVAILABLE_STALL_DURATIONS)//new hidden
+                //prize fengshangdong modify at 20181103
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64) //13mp 4:3
+                CONFIG_ENTRY_VALUE(4160, MINT64)
+                CONFIG_ENTRY_VALUE(3120, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+                //prize end
+
+				/*prize-add for 18:9-huangpengfei-2019-01-18-start*/
+				CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64) //13mp 18:9
+                CONFIG_ENTRY_VALUE(4160, MINT64)
+                CONFIG_ENTRY_VALUE(2080, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+				/*prize-add for 18:9-huangpengfei-2019-01-18-end*/
+				
+                //prize xiaoping modify at 20190105 start
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64) //13mp 19:9
+                CONFIG_ENTRY_VALUE(4160, MINT64)
+                CONFIG_ENTRY_VALUE(1968, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+                //prize xiaoping modify at 20190105	end
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64) //13mp 16:9
+                CONFIG_ENTRY_VALUE(4096, MINT64)
+                CONFIG_ENTRY_VALUE(2304, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64) //8mp 4:3
+                CONFIG_ENTRY_VALUE(3264, MINT64)
+                CONFIG_ENTRY_VALUE(2448, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64) //8mp 16:9
+                CONFIG_ENTRY_VALUE(3840, MINT64)
+                CONFIG_ENTRY_VALUE(2160, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64)
+                CONFIG_ENTRY_VALUE(2560, MINT64)
+                CONFIG_ENTRY_VALUE(1920, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64)
+                CONFIG_ENTRY_VALUE(1920, MINT64)
+                CONFIG_ENTRY_VALUE(1088, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64)
+                CONFIG_ENTRY_VALUE(1280, MINT64)
+                CONFIG_ENTRY_VALUE( 720, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64)
+                CONFIG_ENTRY_VALUE( 640, MINT64)
+                CONFIG_ENTRY_VALUE( 480, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_BLOB, MINT64)
+                CONFIG_ENTRY_VALUE( 320, MINT64)
+                CONFIG_ENTRY_VALUE( 240, MINT64)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+
+                /*zhengjiang.zhu@prize.Camera.Driver  2018/12/17  add for cts testRaw16JpegConsistency*/
+                //junit.framework.AssertionFailedError: No capture sizes available for RAW format!
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_RAW16, MINT32)
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(3120, MINT32)
+                CONFIG_ENTRY_VALUE(33333333, MINT64)
+                /*zhengjiang.zhu@prize.Camera.Driver  2018/12/17  end for cts testRaw16JpegConsistency*/
+
+                //prize-camera  add for cts:testYuvBurst   by zhuzhengjiang 20190105-begin
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(4160, MINT64)
+                CONFIG_ENTRY_VALUE(3120, MINT64)
+                CONFIG_ENTRY_VALUE(0, MINT64)
+                //prize-camera  add for cts:testYuvBurst   by zhuzhengjiang 20190105-end
+
+				/*prize-add for 18:9-huangpengfei-2019-01-18-start*/
+				CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 18:9
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(2080, MINT32)
+                CONFIG_ENTRY_VALUE(0, MINT32)
+				/*prize-add for 18:9-huangpengfei-2019-01-18-end*/
+				
+                //prize-camera  add for cts:testAvailableStreamConfigs   by zhuzhengjiang 20190109-begin
+                //Size 4096x2304 not found in YUV format
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 19:9
+                CONFIG_ENTRY_VALUE(4160, MINT32)
+                CONFIG_ENTRY_VALUE(1968, MINT32)
+                CONFIG_ENTRY_VALUE(0, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //13mp 16:9
+                CONFIG_ENTRY_VALUE(4096, MINT32)
+                CONFIG_ENTRY_VALUE(2304, MINT32)
+                CONFIG_ENTRY_VALUE(0, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //8mp 4:3
+                CONFIG_ENTRY_VALUE(3264, MINT32)
+                CONFIG_ENTRY_VALUE(2448, MINT32)
+                CONFIG_ENTRY_VALUE(0, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32) //8mp 16:9
+                CONFIG_ENTRY_VALUE(3840, MINT32)
+                CONFIG_ENTRY_VALUE(2160, MINT32)
+                CONFIG_ENTRY_VALUE(0, MINT32)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT32)
+                CONFIG_ENTRY_VALUE(2560, MINT32)
+                CONFIG_ENTRY_VALUE(1920, MINT32)
+                CONFIG_ENTRY_VALUE(0, MINT32)
+                 //prize-camera  add for cts:testAvailableStreamConfigs   by zhuzhengjiang 20190109-end
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(1920, MINT64)
+                CONFIG_ENTRY_VALUE(1088, MINT64)
+                CONFIG_ENTRY_VALUE(0   , MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(1920, MINT64)
+                CONFIG_ENTRY_VALUE(1080, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)
+
+                //prize-xiaoping-20190105-start
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(1520, MINT64)
+                CONFIG_ENTRY_VALUE(720, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(2304, MINT64)
+                CONFIG_ENTRY_VALUE(1088, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)
+
+                //prize-xiaoping-20190105-end
+
+                //prize fengshangdong 
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(1440, MINT64)
+                CONFIG_ENTRY_VALUE(1080, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)
+                //prize end
+				
+				/*prize-add for 18:9-huangpengfei-2019-01-18-start*/
+				CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(1440, MINT64)
+                CONFIG_ENTRY_VALUE( 720, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)
+				/*prize-add for 18:9-huangpengfei-2019-01-18-end*/
+				
+                //prize-huangzhanbin-20181208-add
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(1280, MINT64)
+                CONFIG_ENTRY_VALUE( 960, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)
+                //prize-huangzhanbin-20181208-end
+				
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE(1280, MINT64)
+                CONFIG_ENTRY_VALUE( 720, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 960, MINT64)
+                CONFIG_ENTRY_VALUE( 720, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 720, MINT64)
+                CONFIG_ENTRY_VALUE( 480, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 640, MINT64)
+                CONFIG_ENTRY_VALUE( 480, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 352, MINT64)
+                CONFIG_ENTRY_VALUE( 288, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)
+
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 320, MINT64)
+                CONFIG_ENTRY_VALUE( 240, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)
+	
+				/*prize-modify-add ThumbnailSize-xiaoping-20190117-start*/
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64) //19:9
+                CONFIG_ENTRY_VALUE( 304, MINT64)
+                CONFIG_ENTRY_VALUE( 144, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)	
+	
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64) //18:9
+                CONFIG_ENTRY_VALUE( 288, MINT64)
+                CONFIG_ENTRY_VALUE( 144, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)	
+	
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64) //16:9
+                CONFIG_ENTRY_VALUE( 256, MINT64)
+                CONFIG_ENTRY_VALUE( 144, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)	
+				/*prize-modify-add ThumbnailSize-xiaoping-20190117-end*/
+				
+                CONFIG_ENTRY_VALUE(HAL_PIXEL_FORMAT_YCbCr_420_888, MINT64)
+                CONFIG_ENTRY_VALUE( 176, MINT64)
+                CONFIG_ENTRY_VALUE( 144, MINT64)
+                CONFIG_ENTRY_VALUE(   0, MINT64)
+    CONFIG_METADATA_END()
+    //==========================================================================
+    /*CONFIG_METADATA_BEGIN(MTK_SCALER_STREAM_CONFIGURATION_MAP)//new synthetic
+        CONFIG_ENTRY_VALUE( , MINT32)
+    CONFIG_METADATA_END()*/
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_SCALER_CROPPING_TYPE)//new
+        CONFIG_ENTRY_VALUE(MTK_SCALER_CROPPING_TYPE_CENTER_ONLY , MUINT8)
+    CONFIG_METADATA_END()
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_REPROCESS_MAX_CAPTURE_STALL)
+        CONFIG_ENTRY_VALUE(2 , MINT32)
+    CONFIG_METADATA_END()
+    //==========================================================================
+//    [ ANDROID_SCALER_MAX_DIGITAL_ZOOM - ANDROID_SCALER_START ] =
+//    { "maxDigitalZoom",                TYPE_FLOAT  },
+    //==========================================================================
+//------------------------------------------------------------------------------
+//  android.jpeg
+//------------------------------------------------------------------------------
+    CONFIG_METADATA_BEGIN(MTK_JPEG_AVAILABLE_THUMBNAIL_SIZES)
+        CONFIG_ENTRY_VALUE(MSize(0,   0), MSize)
+        CONFIG_ENTRY_VALUE(MSize(160, 96), MSize)
+        CONFIG_ENTRY_VALUE(MSize(192, 108), MSize)
+		CONFIG_ENTRY_VALUE(MSize(192, 144), MSize)
+		/*prize-modify-add ThumbnailSize-xiaoping-20190117-start*/
+        CONFIG_ENTRY_VALUE(MSize(256, 144), MSize)
+		CONFIG_ENTRY_VALUE(MSize(288, 144), MSize)
+		CONFIG_ENTRY_VALUE(MSize(304, 144), MSize)
+		/*prize-modify-add ThumbnailSize-xiaoping-20190117-end*/
+    CONFIG_METADATA_END()
+    //==========================================================================
+    CONFIG_METADATA_BEGIN(MTK_JPEG_MAX_SIZE)//
+        CONFIG_ENTRY_VALUE(15575040, MINT32) //4160*3120*2*0.6 prize fengshangdong modify at 20190111
+    CONFIG_METADATA_END()
+    //==========================================================================
+//    [ ANDROID_JPEG_SIZE - ANDROID_JPEG_START ] =
+//    { "size",                          TYPE_INT32  },
+    //==========================================================================
+//------------------------------------------------------------------------------
+STATIC_METADATA_END()
+
