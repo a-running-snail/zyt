@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- config manual test icon show on the launcher -->
+    <bool name="is_manualtest_launcher_enabled" translatable="false">false</bool>
+</resources>
